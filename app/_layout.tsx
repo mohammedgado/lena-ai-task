@@ -1,29 +1,38 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import PrivacyScreen from './privacy';
+import WebViewScreen from './webview';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+const DrawerNav = createDrawerNavigator();
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
 
+export default function Layout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <DrawerNav.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#f4511e',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}
+    >
+      <DrawerNav.Screen 
+        name="Chat" 
+        component={WebViewScreen}
+        options={{
+          title: 'Chat with Lena',
+        }}
+      />
+      <DrawerNav.Screen 
+        name="Privacy" 
+        component={PrivacyScreen}
+        options={{
+          title: 'Privacy Policy',
+        }}
+      />
+    </DrawerNav.Navigator>
   );
 }
